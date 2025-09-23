@@ -19,6 +19,10 @@ namespace eBrowser
         public static ListPage Instance { get; set; } = null!;
         public PostsSession session = new("posts.json".ToPersistPath());
         public int Page { get; set; } = 1;
+        public string? Search {
+            get => SearchBox.Text;
+            set => SearchBox.Text = value;
+        }
         public ePosts? currentPosts;
         public event EventHandler<PostClickedArgs>? PostClicked;
         
@@ -118,34 +122,33 @@ namespace eBrowser
             }
         }
         
-        async void SearchButton_OnClick(object? sender, RoutedEventArgs e)
+        private void SearchButton_OnClick(object? sender, RoutedEventArgs e)
         {
-            try
-            {
-                if (SearchBox.Text == null || string.IsNullOrWhiteSpace(SearchBox.Text))
-                {
+            CommitSearch();
+        }
+
+        public async void CommitSearch() {
+            try {
+                if (SearchBox.Text == null || string.IsNullOrWhiteSpace(SearchBox.Text)) {
                     Console.WriteLine("Please enter a search query");
                     StatusLabel.IsVisible = true;
                     StatusLabel.Content = "Please enter a search query";
                     return;
                 }
-            
+
                 IsEnabled = false;
-                try
-                {
+                try {
                     var intPosts = await e621Client.Current.GetPostsAsync(SearchBox.Text);
                     if (intPosts != null)
                         InitializeNewState(intPosts);
                 }
-                catch (Exception ex)
-                {
+                catch (Exception ex) {
                     Console.WriteLine(ex);
                     StatusLabel.Content = ex.Message;
                 }
                 IsEnabled = true;
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 Console.WriteLine(ex);
             }
         }

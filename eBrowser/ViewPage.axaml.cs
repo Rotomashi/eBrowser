@@ -9,6 +9,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
@@ -308,6 +309,87 @@ namespace eBrowser
         {
             var handler = new JsEventHandler();
             webView.RegisterJavascriptObject("dotNetHandler", handler);
+        }
+        private void OnBlacklistTag(object? sender, RoutedEventArgs e) {
+            Console.WriteLine("[OnBlacklistTag] invoked");
+
+            if (GetSelectedTag(sender) is string tag) {
+                Console.WriteLine($"[OnBlacklistTag] Selected tag = {tag}");
+                // Your logic to blacklist the tag
+            }
+            else {
+                Console.WriteLine("[OnBlacklistTag] No tag selected (null)");
+            }
+        }
+
+        private void OnSearch(object? sender, RoutedEventArgs e) {
+            Console.WriteLine("[OnSearch] invoked");
+
+            if (GetSelectedTag(sender) is string tag) {
+                Console.WriteLine($"[OnSearch] Selected tag = {tag}");
+                ListPage.Instance.Search = tag;
+                ListPage.Instance.CommitSearch();
+                Console.WriteLine($"[OnSearch] Search set to '{ListPage.Instance.Search}'");
+            }
+            else {
+                Console.WriteLine("[OnSearch] No tag selected (null)");
+            }
+        }
+
+        private void OnAddToSearch(object? sender, RoutedEventArgs e) {
+            Console.WriteLine("[OnAddToSearch] invoked");
+
+            if (GetSelectedTag(sender) is string tag) {
+                Console.WriteLine($"[OnAddToSearch] Selected tag = {tag}");
+                ListPage.Instance.Search += tag;
+                Console.WriteLine($"[OnAddToSearch] Search now = '{ListPage.Instance.Search}'");
+            }
+            else {
+                Console.WriteLine("[OnAddToSearch] No tag selected (null)");
+            }
+        }
+
+        private void OnRemoveFromSearch(object? sender, RoutedEventArgs e) {
+            Console.WriteLine("[OnRemoveFromSearch] invoked");
+
+            if (GetSelectedTag(sender) is string tag) {
+                Console.WriteLine($"[OnRemoveFromSearch] Selected tag = {tag}");
+                ListPage.Instance.Search += $"-{tag}";
+                Console.WriteLine($"[OnRemoveFromSearch] Search now = '{ListPage.Instance.Search}'");
+            }
+            else {
+                Console.WriteLine("[OnRemoveFromSearch] No tag selected (null)");
+            }
+        }
+
+        private string? GetSelectedTag(object? sender) {
+            if (sender is not MenuItem mi)
+                return null;
+
+            // climb the logical tree until we find the ContextMenu
+            var current = mi as ILogical;
+            ContextMenu? cm = null;
+
+            while (current != null) {
+                if (current is ContextMenu found) {
+                    cm = found;
+                    break;
+                }
+                current = current.LogicalParent;
+            }
+
+            if (cm == null)
+                return null;
+
+            // Identify which context menu we are in
+            ListBox? lb = cm.Name switch {
+                "ArtistsContextMenu" => ArtistsList,
+                "CharactersContextMenu" => CharactersList,
+                "TagsContextMenu" => TagsList,
+                _ => null
+            };
+
+            return lb?.SelectedItem?.ToString();
         }
 
         public class JsEventHandler

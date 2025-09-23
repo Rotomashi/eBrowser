@@ -1,4 +1,5 @@
 using System;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -95,13 +96,21 @@ public partial class MainWindow : Window
         mode = MenuMode.Settings;
     }
 
-    public void OnKeyDownHere(object? sender, KeyEventArgs e)
-    {
+    private static bool IsTextInputFocused(Visual? scope) {
+        var focused = GetTopLevel(scope)?.FocusManager?.GetFocusedElement();
+
+        return focused is TextBox or ComboBox;
+    }
+
+    public void OnKeyDownHere(object? sender, KeyEventArgs e) {
+        if (IsTextInputFocused(this))
+            return;
+
         switch (e.Key)
         {
             case Key.Right:
             {
-                if (Equals(Content, _listPage) && _listPage.IsEnabled && IsFocused)
+                if (Equals(Content, _listPage) && _listPage.IsEnabled)
                 {
                     e.Handled = true;
                     _listPage.NextPage();
@@ -116,7 +125,7 @@ public partial class MainWindow : Window
             }
             case Key.Left:
             {
-                if (Equals(Content, _listPage) && _listPage.IsEnabled && IsFocused)
+                if (Equals(Content, _listPage) && _listPage.IsEnabled)
                 {
                     e.Handled = true;
                     _listPage.PreviousPage();
@@ -142,14 +151,11 @@ public partial class MainWindow : Window
             }
             case Key.Enter:
             {
-                if (IsFocused)
+                if (Equals(Content, _listPage) && _listPage is { IsEnabled: true, CurrentView.Items.Count: > 0 })
                 {
-                    if (Equals(Content, _listPage) && _listPage is { IsEnabled: true, CurrentView.Items.Count: > 0 })
-                    {
-                        e.Handled = true;
-                        var item = _listPage.CurrentView.Items[0];
-                        ListPageOnPostClicked(this, new PostClickedArgs(item.Posts, item.Index));
-                    }
+                    e.Handled = true;
+                    var item = _listPage.CurrentView.Items[0];
+                    ListPageOnPostClicked(this, new PostClickedArgs(item.Posts, item.Index));
                 }
 
                 break;
@@ -157,8 +163,10 @@ public partial class MainWindow : Window
         }
     }
 
-    public void OnKeyDown(string keyEvent)
-    {
+    public void OnKeyDown(string keyEvent) {
+        if (IsTextInputFocused(this))
+            return;
+
         Console.WriteLine($"[Browser] {keyEvent}");
         if (keyEvent.Contains("Right"))
         {

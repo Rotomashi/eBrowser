@@ -5,54 +5,83 @@
              xmlns:webview="clr-namespace:WebViewControl;assembly=WebViewControl.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="eBrowser.ViewPage">
-    <DockPanel LastChildFill="True">
-        <Border Width="250" BorderBrush="Gray" BorderThickness="1" DockPanel.Dock="Left" Padding="5">
-            <Grid RowSpacing="5" RowDefinitions="Auto,Auto,Auto,*">
-                <Button x:Name="BackButton" Grid.Row="1" Content="Back" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" Click="BackButton_OnClick"/>
-                <Grid HorizontalAlignment="Stretch" Grid.Row="0" ColumnDefinitions="Auto,*,Auto">
-                    <Button x:Name="PreviousPageButton" Grid.Column="0" Content="&lt;" Click="PreviousPageButton_OnClick"/>
-                    <TextBlock x:Name="PageLabel" Grid.Column="1" TextAlignment="Center" VerticalAlignment="Center" Text="1/75"/>
-                    <Button x:Name="NextPageButton" Grid.Column="2" Content="&gt;" Click="NextPageButton_OnClick"/>
-                </Grid>
-                <Label x:Name="BasicInfoLabel" Grid.Row="2" Content="1920x1080 | Gif | 999 MB" HorizontalAlignment="Center"/>
-                <Grid VerticalAlignment="Stretch" Grid.Row="3" RowSpacing="5">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="100"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Label Content="Artists" Grid.Row="0"/>
-                    <ScrollViewer Grid.Row="1">
-                        <ListBox x:Name="ArtistsList"/>
-                    </ScrollViewer>
-                    <Label Content="Characters" Grid.Row="2"/>
-                    <ScrollViewer Grid.Row="3">
-                        <ListBox x:Name="CharactersList"/>
-                    </ScrollViewer>
-                    <Label Content="Tags" Grid.Row="4"/>
-                    <ScrollViewer Grid.Row="5">
-                        <ListBox x:Name="TagsList"/>
-                    </ScrollViewer>
-                    <Label Content="Sources" Grid.Row="6"/>
-                    <ScrollViewer Grid.Row="7" MinHeight="50">
-                        <ListBox x:Name="SourcesList"/>
-                    </ScrollViewer>
-                    <Label Content="Pools" Grid.Row="8"/>
-                    <ScrollViewer Grid.Row="9" MinHeight="50">
-                        <ListBox x:Name="PoolsList"/>
-                    </ScrollViewer>
-                </Grid>
-            </Grid>
-        </Border>
-        <Border BorderBrush="Gray" BorderThickness="1" Padding="5">
-            <webview:WebView x:Name="webView" KeyDown="WebView_OnKeyDown" Initialized="WebView_OnInitialized"/>
-        </Border>
-    </DockPanel>
+	<DockPanel LastChildFill="True">
+		<Border Width="250" BorderBrush="Gray" BorderThickness="1" DockPanel.Dock="Left" Padding="5">
+			<Grid RowSpacing="5" RowDefinitions="Auto,Auto,Auto,*">
+				<Button x:Name="BackButton" Grid.Row="1" Content="Back" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch" Click="BackButton_OnClick"/>
+				<Grid HorizontalAlignment="Stretch" Grid.Row="0" ColumnDefinitions="Auto,*,Auto">
+					<Button x:Name="PreviousPageButton" Grid.Column="0" Content="&lt;" Click="PreviousPageButton_OnClick"/>
+					<TextBlock x:Name="PageLabel" Grid.Column="1" TextAlignment="Center" VerticalAlignment="Center" Text="1/75"/>
+					<Button x:Name="NextPageButton" Grid.Column="2" Content="&gt;" Click="NextPageButton_OnClick"/>
+				</Grid>
+				<Label x:Name="BasicInfoLabel" Grid.Row="2" Content="1920x1080 | Gif | 999 MB" HorizontalAlignment="Center"/>
+				<Grid VerticalAlignment="Stretch" Grid.Row="3" RowSpacing="5">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="50"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="100"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="*"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+					<Label Content="Artists" Grid.Row="0"/>
+					<ScrollViewer Grid.Row="1">
+						<ListBox x:Name="ArtistsList">
+							<ListBox.ContextMenu>
+								<ContextMenu Name="ArtistsContextMenu">
+									<MenuItem Header="Blacklist Tag" Click="OnBlacklistTag"/>
+									<MenuItem Header="Search" Click="OnSearch"/>
+									<MenuItem Header="Add to search" Click="OnAddToSearch"/>
+									<MenuItem Header="Remove from search" Click="OnRemoveFromSearch"/>
+								</ContextMenu>
+							</ListBox.ContextMenu>
+						</ListBox>
+					</ScrollViewer>
+
+					<Label Content="Characters" Grid.Row="2"/>
+					<ScrollViewer Grid.Row="3">
+						<ListBox x:Name="CharactersList">
+							<ListBox.ContextMenu>
+								<ContextMenu Name="CharactersContextMenu">
+									<MenuItem Header="Blacklist Tag" Click="OnBlacklistTag"/>
+									<MenuItem Header="Search" Click="OnSearch"/>
+									<MenuItem Header="Add to search" Click="OnAddToSearch"/>
+									<MenuItem Header="Remove from search" Click="OnRemoveFromSearch"/>
+								</ContextMenu>
+							</ListBox.ContextMenu>
+						</ListBox>
+					</ScrollViewer>
+
+					<Label Content="Tags" Grid.Row="4"/>
+					<ScrollViewer Grid.Row="5">
+						<ListBox x:Name="TagsList">
+							<ListBox.ContextMenu>
+								<ContextMenu Name="TagsContextMenu">
+									<MenuItem Header="Blacklist Tag" Click="OnBlacklistTag"/>
+									<MenuItem Header="Search" Click="OnSearch"/>
+									<MenuItem Header="Add to search" Click="OnAddToSearch"/>
+									<MenuItem Header="Remove from search" Click="OnRemoveFromSearch"/>
+								</ContextMenu>
+							</ListBox.ContextMenu>
+						</ListBox>
+					</ScrollViewer>
+					<Label Content="Sources" Grid.Row="6"/>
+					<ScrollViewer Grid.Row="7" MinHeight="50">
+						<ListBox x:Name="SourcesList"/>
+					</ScrollViewer>
+					<Label Content="Pools" Grid.Row="8"/>
+					<ScrollViewer Grid.Row="9" MinHeight="50">
+						<ListBox x:Name="PoolsList"/>
+					</ScrollViewer>
+				</Grid>
+			</Grid>
+		</Border>
+		<Border BorderBrush="Gray" BorderThickness="1" Padding="5">
+			<webview:WebView x:Name="webView" KeyDown="WebView_OnKeyDown" Initialized="WebView_OnInitialized"/>
+		</Border>
+	</DockPanel>
 </UserControl>
