@@ -282,6 +282,9 @@ namespace eBrowser
         public string? CustomPath { get; set; }
         [JsonPropertyName("name_scheme")]
         public string NameScheme { get; set; } = "{artist}-{id}{ext}";
+
+        [JsonPropertyName("blacklisted_tags")]
+        public List<string> BlacklistedTags { get; set; } = new();
     }
 }
 

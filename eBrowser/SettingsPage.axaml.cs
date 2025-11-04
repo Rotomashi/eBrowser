@@ -113,7 +113,7 @@ namespace eBrowser
 
             try {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
-                    Process.Start(new ProcessStartInfo("explorer", folderPath) { UseShellExecute = true });
+                    Process.Start(folderPath);
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
                     Process.Start("xdg-open", folderPath);
