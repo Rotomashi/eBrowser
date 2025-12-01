@@ -141,6 +141,7 @@ namespace eBrowser
                     var intPosts = await e621Client.Current.GetPostsAsync(SearchBox.Text);
                     if (intPosts != null)
                         InitializeNewState(intPosts);
+                    StatusLabel.Content = null;
                 }
                 catch (Exception ex) {
                     Console.WriteLine(ex);

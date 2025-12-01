@@ -19,7 +19,7 @@
                 </Grid>
                 <Grid ColumnDefinitions="Auto, *" ColumnSpacing="5">
                     <Label Content="API Key" VerticalAlignment="Center"/>
-                    <TextBox x:Name="ApiKeyBox" Grid.Column="1"/>
+                    <TextBox x:Name="ApiKeyBox" Grid.Column="1" PasswordChar="*"/>
                 </Grid>
                 <Button Content="Save" Click="SaveButton_OnClick"></Button>
             </StackPanel>
