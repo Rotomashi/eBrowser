@@ -74,7 +74,8 @@ namespace eBrowser
             Index = index;
             Posts = posts;
             CurrentPost = post;
-            
+
+            PageLabel.Text = $"{posts.Posts.IndexOf(CurrentPost) + 1}/{posts.Posts.Count}";
             TagsList.Items.Clear();
             ArtistsList.Items.Clear();
             CharactersList.Items.Clear();
@@ -280,18 +281,19 @@ namespace eBrowser
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(FilePath) && File.Exists(FilePath))
+                var filePath = FilePath;
+                if (!string.IsNullOrWhiteSpace(filePath) && File.Exists(filePath))
                     return;
 
                 var bytes = await e621Client.HttpClient.GetByteArrayAsync(FileUrl);
 
-                if (string.IsNullOrWhiteSpace(FilePath))
+                if (string.IsNullOrWhiteSpace(filePath))
                     return;
 
-                var directoryPath = Path.GetDirectoryName(FilePath);
+                var directoryPath = Path.GetDirectoryName(filePath);
                 if (directoryPath != null && !Directory.Exists(directoryPath))
                     Directory.CreateDirectory(directoryPath);
-                await File.WriteAllBytesAsync(FilePath, bytes);
+                await File.WriteAllBytesAsync(filePath, bytes);
             }
             catch (Exception e)
             {
