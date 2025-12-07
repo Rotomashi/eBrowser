@@ -4,14 +4,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
-using Avalonia.Markup.Xaml;
-using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
@@ -22,7 +18,7 @@ namespace eBrowser
 {
     public partial class ViewPage : UserControl
     {
-        public event Action onBackPressed;
+        public event Action? onBackPressed;
         
         public ePosts? Posts;
         public int Index;
@@ -33,6 +29,7 @@ namespace eBrowser
         
         public string? FileUrl;
         public string FilePath => PostFileNamer.GetPath(CurrentPost!);
+
         public ViewPage()
         {
             InitializeComponent();
@@ -312,6 +309,7 @@ namespace eBrowser
             var handler = new JsEventHandler();
             webView.RegisterJavascriptObject("dotNetHandler", handler);
         }
+
         private void OnBlacklistTag(object? sender, RoutedEventArgs e) {
             Console.WriteLine("[OnBlacklistTag] invoked");
 
@@ -325,13 +323,9 @@ namespace eBrowser
         }
 
         private void OnSearch(object? sender, RoutedEventArgs e) {
-            Console.WriteLine("[OnSearch] invoked");
-
             if (GetSelectedTag(sender) is string tag) {
-                Console.WriteLine($"[OnSearch] Selected tag = {tag}");
                 ListPage.Instance.Search = tag;
                 ListPage.Instance.CommitSearch();
-                Console.WriteLine($"[OnSearch] Search set to '{ListPage.Instance.Search}'");
             }
             else {
                 Console.WriteLine("[OnSearch] No tag selected (null)");
@@ -339,12 +333,8 @@ namespace eBrowser
         }
 
         private void OnAddToSearch(object? sender, RoutedEventArgs e) {
-            Console.WriteLine("[OnAddToSearch] invoked");
-
             if (GetSelectedTag(sender) is string tag) {
-                Console.WriteLine($"[OnAddToSearch] Selected tag = {tag}");
                 ListPage.Instance.Search += " " + tag;
-                Console.WriteLine($"[OnAddToSearch] Search now = '{ListPage.Instance.Search}'");
             }
             else {
                 Console.WriteLine("[OnAddToSearch] No tag selected (null)");
@@ -352,12 +342,8 @@ namespace eBrowser
         }
 
         private void OnRemoveFromSearch(object? sender, RoutedEventArgs e) {
-            Console.WriteLine("[OnRemoveFromSearch] invoked");
-
             if (GetSelectedTag(sender) is string tag) {
-                Console.WriteLine($"[OnRemoveFromSearch] Selected tag = {tag}");
                 ListPage.Instance.Search += $" -{tag}";
-                Console.WriteLine($"[OnRemoveFromSearch] Search now = '{ListPage.Instance.Search}'");
             }
             else {
                 Console.WriteLine("[OnRemoveFromSearch] No tag selected (null)");
