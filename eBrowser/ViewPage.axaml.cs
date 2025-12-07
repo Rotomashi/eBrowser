@@ -343,7 +343,7 @@ namespace eBrowser
 
             if (GetSelectedTag(sender) is string tag) {
                 Console.WriteLine($"[OnAddToSearch] Selected tag = {tag}");
-                ListPage.Instance.Search += tag;
+                ListPage.Instance.Search += " " + tag;
                 Console.WriteLine($"[OnAddToSearch] Search now = '{ListPage.Instance.Search}'");
             }
             else {
@@ -356,7 +356,7 @@ namespace eBrowser
 
             if (GetSelectedTag(sender) is string tag) {
                 Console.WriteLine($"[OnRemoveFromSearch] Selected tag = {tag}");
-                ListPage.Instance.Search += $"-{tag}";
+                ListPage.Instance.Search += $" -{tag}";
                 Console.WriteLine($"[OnRemoveFromSearch] Search now = '{ListPage.Instance.Search}'");
             }
             else {
